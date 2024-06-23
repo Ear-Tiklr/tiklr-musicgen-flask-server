@@ -55,6 +55,7 @@ def generate_audio_craft():
     upload_results = []
     for i, text in enumerate(audio_file_path):
         # Upload the generated music to Cloudinary
+        print(text)
         upload_result = cloudinary.uploader.upload(text['path'], resource_type="video", public_id=text['name'])
         upload_results.append(upload_result['secure_url'])
 
