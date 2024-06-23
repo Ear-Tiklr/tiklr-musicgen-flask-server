@@ -10,6 +10,9 @@ from flask_cors import CORS, cross_origin
 bp = Blueprint('main', __name__)
 CORS(bp, resources={r"/*": {"origins": "*", "methods": "*", "allow_headers": "*"}})
 
+@bp.route("/")
+def index():
+    return "<h1>Hello!</h1>"
 
 @bp.route('/generate/MUSIC_GEN', methods=['POST'])
 @cross_origin()
@@ -17,7 +20,7 @@ def generate():
     data = request.get_json()
     text = data.get('prompts')
 
-    token_len = request.args.get('token_len', default=5, type=int)
+    token_len = request.args.get('token_len', default=256, type=int)
     model_name = current_app.config['AUDIOGEN_MODEL']
 
     model = request.args.get('model_name', default=model_name, type=str)
