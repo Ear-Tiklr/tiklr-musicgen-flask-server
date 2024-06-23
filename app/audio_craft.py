@@ -16,10 +16,10 @@ def generate_music_from_text_craft(text_input, duration, model_name):
 
     for idx, one_wav in enumerate(wav):
         sanitized_filename = sanitize_filename(text_input[idx])
-        output_path = f"{directory}{sanitized_filename}.wav"
+        output_path = f"{directory}{sanitized_filename}"
         audio_write(f'{output_path}', one_wav.cpu(), model.sample_rate, strategy="loudness")
         print(f'Saved: {output_path}')
-        audio_files.append({"name": sanitized_filename, "path": output_path})
+        audio_files.append({"name": sanitized_filename, "path": f'{output_path}.wav'})
 
     return audio_files
 
