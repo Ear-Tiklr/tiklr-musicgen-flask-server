@@ -2,6 +2,7 @@ from audiocraft.models import MusicGen
 from audiocraft.data.audio import audio_write
 import re
 from flask import current_app
+import scipy
 
 
 def generate_music_from_text_craft(text_input, duration, model_name):
@@ -14,12 +15,15 @@ def generate_music_from_text_craft(text_input, duration, model_name):
     audio_files = []
 
     for idx, one_wav in enumerate(wav):
-        # Will save under {idx}.wav, with loudness normalization at -14 db LUFS.
-        file_name = f"{directory}/{idx}.wav"
-        audio_write(f'{file_name}', one_wav.cpu(), model.sample_rate, strategy="loudness")
-        audio_files.append(file_name)
+        sanitized_filename = sanitize_filename(text_input[idx])
+        output_path = f"{directory}{sanitized_filename}.wav"
+        audio_write(f'{output_path}', one_wav.cpu(), model.sample_rate, strategy="loudness")
+        print(f'Saved: {output_path}')
+        audio_files.append({"name": sanitized_filename, "path": output_path})
 
     return audio_files
 
 
-
+def sanitize_filename(text):
+    # Remove non-alphanumeric characters and replace spaces with underscores
+    return re.sub(r'[^a-zA-Z0-9]', '_', text)
