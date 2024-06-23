@@ -53,15 +53,16 @@ def generate_audio_craft():
     # Generate music from text
     audio_file_path = generate_music_from_text_craft(text, duration, model)
     upload_results = []
+    index = 0
     for i, text in enumerate(audio_file_path):
         # Upload the generated music to Cloudinary
-        print(text)
-        f_name = sanitize_filename(text[i])
+        print(f'text:{text} i:{i},, idx:{index}')
+        f_name = sanitize_filename(text[index])
         upload_result = cloudinary.uploader.upload(text['path'], resource_type="video", public_id=f_name)
         upload_results.append(upload_result['secure_url'])
+        index += 1
 
     return jsonify({'urls': upload_results})
-
 
 
 def sanitize_filename(text):
