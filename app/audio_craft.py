@@ -5,7 +5,7 @@ from flask import current_app
 
 
 def generate_music_from_text_craft(text_input, duration, model_name):
-    model = MusicGen.get_pretrained("large")
+    model = MusicGen.get_pretrained(model_name)
     model.set_generation_params(duration=duration)  # generate 8 seconds.
 
     descriptions = ["happy rock", "energetic EDM"]
