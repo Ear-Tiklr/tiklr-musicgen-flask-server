@@ -11,18 +11,19 @@ In this example :
 from maidi import MidiScore, ScoreTagger, midi_library
 from maidi.analysis import tags_providers
 
-score = MidiScore.from_midi(midi_library.get_midi_file('drum_and_bass'))
+if __name__ == '__main__':
+    score = MidiScore.from_midi(midi_library.get_midi_file('drum_and_bass'))
 
-tagger = ScoreTagger(
-    [
-        tags_providers.DensityTagsProvider(),
-        tags_providers.MinMaxPolyphonyTagsProvider(),
-        tags_providers.MinMaxRegisterTagsProvider(),
-        tags_providers.SpecialNotesTagsProvider(),
-    ]
-)
+    tagger = ScoreTagger(
+        [
+            tags_providers.DensityTagsProvider(),
+            tags_providers.MinMaxPolyphonyTagsProvider(),
+            tags_providers.MinMaxRegisterTagsProvider(),
+            tags_providers.SpecialNotesTagsProvider(),
+        ]
+    )
 
-tags = tagger.tag_score(score)
-chords = score.get_chords_prompt()
-print(tags)
-print(chords)
+    tags = tagger.tag_score(score)
+    chords = score.get_chords_prompt()
+    print(tags)
+    print(chords)
