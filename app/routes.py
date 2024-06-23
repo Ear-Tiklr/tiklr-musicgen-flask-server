@@ -1,7 +1,7 @@
 # app/routes.py
 
 from flask import Blueprint, request, jsonify, current_app
-import cloudinary.uploader
+import cloudinary.uploader, re
 
 from app.audio_craft import generate_music_from_text_craft
 from app.audio_gen import generate_music_from_text
@@ -56,7 +56,14 @@ def generate_audio_craft():
     for i, text in enumerate(audio_file_path):
         # Upload the generated music to Cloudinary
         print(text)
-        upload_result = cloudinary.uploader.upload(text['path'], resource_type="video", public_id=text['name'])
+        f_name = sanitize_filename(text[i])
+        upload_result = cloudinary.uploader.upload(text['path'], resource_type="video", public_id=f_name)
         upload_results.append(upload_result['secure_url'])
 
     return jsonify({'urls': upload_results})
+
+
+
+def sanitize_filename(text):
+    # Remove non-alphanumeric characters and replace spaces with underscores
+    return re.sub(r'[^a-zA-Z0-9]', '_', text)
